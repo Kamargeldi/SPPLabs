@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,8 +13,47 @@ namespace lab1
         public int ISBN { get; set; }
         public string Author { get; set; } = "";
         public string Name { get; set; } = "";
-        public int Price { get; set; }
+        public double Price { get; set; }
         public string Publisher { get; set; } = "";
+
+        private CultureInfo culture = CultureInfo.CurrentCulture;
+
+        public Book()
+        {
+
+        }
+
+        public Book(string name, string author, string publisher, double price, int isbn)
+        {
+            if (name is null)
+                throw new ArgumentNullException(nameof(name));
+            if (author is null)
+                throw new ArgumentNullException(nameof(author));
+            if (publisher is null)
+                throw new ArgumentNullException(nameof(publisher));
+
+            Name = name;
+            Publisher = publisher;
+            Author = author;
+            Price = price;
+            ISBN = isbn;
+        }
+
+        public Book(string name, string author, string publisher, double price, int isbn, CultureInfo culture) : this(name, author, publisher, price, isbn)
+        {
+            if (culture is null)
+                throw new ArgumentNullException(nameof(culture));
+
+            this.culture = culture;
+        }
+
+        public Book(CultureInfo culture)
+        {
+            if (culture is null)
+                throw new ArgumentNullException(nameof(culture));
+
+            this.culture = culture;
+        }
 
         /// <summary>
         /// Compares current instance with other.
@@ -72,8 +112,6 @@ namespace lab1
             return !(leftSide == rightSide);
         }
 
-
-
         public override bool Equals(object obj)
         {
             return this.Equals(obj as Book);
@@ -81,10 +119,7 @@ namespace lab1
 
         public override string ToString()
         {
-            
-            return $"{this.Name}, {this.ISBN}, {this.Publisher}," +
-                   $" {this.Price + Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencySymbol}," +
-                   $" {this.Author}";
+            return $"{Name}, {ISBN}, {Publisher}, {Price + culture.NumberFormat.CurrencySymbol}, {Author}";
         }
 
         public override int GetHashCode()
