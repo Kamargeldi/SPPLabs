@@ -10,7 +10,7 @@ namespace lab1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(null > null);
+            Console.WriteLine(new Book().GetHashCode());
             Console.ReadKey();
         }
     }

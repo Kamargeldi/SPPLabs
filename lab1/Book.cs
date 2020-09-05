@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace lab1
@@ -9,10 +10,10 @@ namespace lab1
     internal class Book : IEquatable<Book>, IComparable<Book>
     {
         public int ISBN { get; set; }
-        public string Author { get; set; }
-        public string Name { get; set; }
+        public string Author { get; set; } = "";
+        public string Name { get; set; } = "";
         public int Price { get; set; }
-        public string Publisher { get; set; }
+        public string Publisher { get; set; } = "";
 
         /// <summary>
         /// Compares current instance with other.
@@ -69,6 +70,30 @@ namespace lab1
         public static bool operator !=(Book leftSide, Book rightSide)
         {
             return !(leftSide == rightSide);
+        }
+
+
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Book);
+        }
+
+        public override string ToString()
+        {
+            
+            return $"{this.Name}, {this.ISBN}, {this.Publisher}," +
+                   $" {this.Price + Thread.CurrentThread.CurrentCulture.NumberFormat.CurrencySymbol}," +
+                   $" {this.Author}";
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 3) + Author.GetHashCode();
+            hash = (hash * 3) + Name.GetHashCode();
+            hash = (hash * 3) + Publisher.GetHashCode();
+            return hash;
         }
 
     }
