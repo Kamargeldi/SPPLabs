@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace lab1
 {
+    [Serializable]
     internal class Book : IEquatable<Book>, IComparable<Book>
     {
-        public int ISBN { get; set; }
+        private long _isbn;
+        public long ISBN
+        {
+            get => _isbn;
+            set
+            {
+                if (value.ToString().Length != 13)
+                    throw new ArgumentException($"Parameter {nameof(value)} length must be 13 digits");
+            }
+        }
         public string Author { get; set; } = "";
         public string Name { get; set; } = "";
         public double Price { get; set; }
@@ -23,7 +29,7 @@ namespace lab1
 
         }
 
-        public Book(string name, string author, string publisher, double price, int isbn)
+        public Book(string name, string author, string publisher, double price, long isbn)
         {
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
@@ -39,7 +45,7 @@ namespace lab1
             ISBN = isbn;
         }
 
-        public Book(string name, string author, string publisher, double price, int isbn, CultureInfo culture) : this(name, author, publisher, price, isbn)
+        public Book(string name, string author, string publisher, double price, long isbn, CultureInfo culture) : this(name, author, publisher, price, isbn)
         {
             if (culture is null)
                 throw new ArgumentNullException(nameof(culture));
@@ -130,6 +136,20 @@ namespace lab1
             hash = (hash * 3) + Publisher.GetHashCode();
             return hash;
         }
+        
+    }
 
+    internal class BookPriceComparer : IComparer<Book>
+    {
+        public int Compare(Book x, Book y)
+        {
+            if (object.Equals(x, y))
+                return 0;
+            if (x is null)
+                return -1;
+            if (y is null)
+                return 1;
+            return x.Price.CompareTo(y.Price);
+        }
     }
 }
