@@ -5,7 +5,7 @@ using System.Globalization;
 namespace lab1
 {
     [Serializable]
-    internal class Book : IEquatable<Book>, IComparable<Book>
+    public class Book : IEquatable<Book>, IComparable<Book>
     {
         private long _isbn;
         public long ISBN
@@ -125,7 +125,8 @@ namespace lab1
 
         public override string ToString()
         {
-            return $"{Name}, {ISBN}, {Publisher}, {Price + culture.NumberFormat.CurrencySymbol}, {Author}";
+            
+            return $"{Name}, {ISBN}, {Publisher}, {Price.ToString(culture) + culture.NumberFormat.CurrencySymbol}, {Author}";
         }
 
         public override int GetHashCode()

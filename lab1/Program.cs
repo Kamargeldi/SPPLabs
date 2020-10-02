@@ -13,6 +13,7 @@ namespace lab1
     {
         static void Main(string[] args)
         {
+
             BookCollectionService service = new BookCollectionService();
 
             Book book = new Book(new CultureInfo("zh-HK"));

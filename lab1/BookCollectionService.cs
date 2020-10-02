@@ -8,23 +8,24 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace lab1
 {
-    [Serializable]
-    class BookCollectionService
+    
+    public class BookCollectionService
     {
-        private ICollection<Book> _bookCollection;
+        private List<Book> _bookCollection;
 
         public BookCollectionService()
         {
             _bookCollection = new List<Book>();
         }
 
-        public BookCollectionService(ICollection<Book> bookCollection)
+        public BookCollectionService(List<Book> bookCollection)
         {
             if (bookCollection is null)
             {
                 throw new ArgumentNullException(nameof(bookCollection));
             }
 
+            _bookCollection = bookCollection;
         }
 
         public void Add(Book newBook)
@@ -42,10 +43,18 @@ namespace lab1
             _bookCollection.Remove(rmBook);
         }
 
+        public void Sort()
+        {
+            _bookCollection.Sort();
+        }
+
+
         public void Sort(IComparer<Book> comparer)
         {
             if (comparer is null)
                 throw new ArgumentNullException(nameof(comparer));
+
+            _bookCollection.Sort(comparer);
         }
 
         public bool Contains(Book searchBook)
@@ -90,7 +99,7 @@ namespace lab1
 
             var buffer = File.ReadAllBytes(fileName);
             BinaryFormatter formatter = new BinaryFormatter();
-            _bookCollection = (ICollection<Book>)formatter.Deserialize(new MemoryStream(buffer));
+            _bookCollection = (List<Book>)formatter.Deserialize(new MemoryStream(buffer));
         }
 
 
